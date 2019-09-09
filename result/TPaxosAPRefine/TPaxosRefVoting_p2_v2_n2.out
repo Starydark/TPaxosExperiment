@@ -1,0 +1,4 @@
+errors: 0, warnings: 0, exit_state: 0
+Time            Diameter        States Found    Distinct States Queue Size      
+0:00:00         0               1               1               1               
+0:00:02         20              27809           7991            0               
