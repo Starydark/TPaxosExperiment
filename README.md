@@ -1,22 +1,35 @@
-# TPaxosProject
+## Model Checking TPaxos with TLA+
 
-#### TLC参数
+An experiment of model checking the consensus algorithm TPaxos in paper [PaxosStore@VLDB2017](http://www.vldb.org/pvldb/vol10/p1730-lin.pdf). We introduce a variant of TPaxos, TPaxosAP, and check the consistency of TPaxos and TPaxosAP. Meanwhile we build the refinement relation from TPaxos to Voting, TPaxos to EagerVoting(an algorithm equals to Voting) and check the correctness of the relation. The project includes three experiments:
 
-- Participant: {p1, p2, p3} 以及 {p1, p2, p3, p4, p5}
-- Value: {v1, v2} 以及 {v1, v2, v3, v4}
-- Ballot(需要重定义Nat): 1..2以及 1..3
-- Quorum(依赖于Participant): {{p1, p2}, {p1, p3}, {p2, p3}} 或者 {{p1, p2, p3}, {p1, p2, p4}, {p1, p2, p5}, {p1, p3, p4}, {p1, p3, p5}, {p1, p4, p5}, {p2, p3, p4}, {p2, p3, p5}, {p2, p4, p5}, {p3, p4, p5}}
+- TPaxos and TPaxosAP satisfies Consistency.
+- TPaxos refines Voting, TPaxosAP refines EagerVoting.
+- EagerVoting refines Consensus.
 
-#### TLC优化设置
+### Requirements
 
-- Participant、Value均设为Symmetric Set
+- Linux with JDK 8.
+- Some [tlaps](http://tla.msr-inria.inria.fr/tlaps/content/Home.html) modules. 
+
+### TLC Parameters
+
+- Participant: {p1, p2, p3} and {p1, p2, p3, p4, p5}
+- Value: {v1, v2} and {v1, v2, v3, v4}
+- Ballot(redefines Nat): 1..2 and1..3
+- Quorum(subset of Participant): {{p1, p2}, {p1, p3}, {p2, p3}, {p1, p2, p3}} or {{p1, p2, p3}, {p1, p2, p4}, {p1, p2, p5}, {p1, p3, p4}, {p1, p3, p5}, {p1, p4, p5}, {p2, p3, p4}, {p2, p3, p5}, {p2, p4, p5}, {p3, p4, p5}, {p1, p2, p3, p4}, {p1, p2, p3, p5}, {p1, p2, p4, p5}, {p1, p3, p4, p5}, {p2, p3, p4, p5}, {p1, p2, p3, p4, p5}}
+
+### TLC model checking setting
+
+- Participant、Value: Symmetric Set
 - worker = 10
 - head > 40g
 - profile: off
+- state constrain: exist model checking when get distinct states get to 100000000.
 
-#### Note
+### How to run
 
-- 总共需要跑三个module：EagerVoting.tla，TPaxos.tla，TPaxosRefVoting.tla
-- EagerVoting: Properties中添加C!Spec，另外，EagerVoting中参数是Acceptor(非Participant)，Value，Quorum
-- TPaxos: Invariants中添加Consistency。
-- TPaxosRefVoting: Properties中添加V!Spec，另外Temporal formula为SpecR
+```
+# Usage Note: "make" is identical to "make run".
+$make
+```
+

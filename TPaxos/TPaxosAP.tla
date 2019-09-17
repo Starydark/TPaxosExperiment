@@ -1,4 +1,4 @@
------------------------------- MODULE TPaxos --------------------------------
+---------------------------- MODULE TPaxosAP --------------------------------
 (*
 Specification of the consensus protocol in PaxosStore.
 
@@ -78,17 +78,16 @@ Note: pp is m.state[p]; it may not be equal to state[p][p] at the time
 UpdateState is called.
 *)
 UpdateState(q, p, pp) == 
-    LET maxB == Max(state[q][q].maxBal, pp.maxBal)
-    IN  state' = [state EXCEPT 
-                  ![q][p].maxBal = Max(@, pp.maxBal),
-                  ![q][p].maxVBal = Max(@, pp.maxVBal),
-                  ![q][p].maxVVal = IF state[q][p].maxVBal < pp.maxVBal 
-                                    THEN pp.maxVVal ELSE @,
-                  ![q][q].maxBal = maxB, \* make promise first adn then accept
-                  ![q][q].maxVBal = IF maxB <= pp.maxVBal  \* accept
-                                    THEN pp.maxVBal ELSE @, 
-                  ![q][q].maxVVal = IF maxB <= pp.maxVBal  \* accept
-                                    THEN pp.maxVVal ELSE @]  
+    state' = [state EXCEPT 
+                ![q][p].maxBal = Max(@, pp.maxBal),
+                ![q][p].maxVBal = Max(@, pp.maxVBal),
+                ![q][p].maxVVal = IF state[q][p].maxVBal < pp.maxVBal 
+                                  THEN pp.maxVVal ELSE @,
+                ![q][q].maxBal = Max(@, pp.maxBal), \* make promise
+                ![q][q].maxVBal = IF state[q][q].maxBal <= pp.maxVBal \* accept
+                                  THEN pp.maxVBal ELSE @,  
+                ![q][q].maxVVal = IF state[q][q].maxBal <= pp.maxVBal \* accept
+                                  THEN pp.maxVVal ELSE @]  
 (*
 q \in Participant receives and processes a message in Message.
 *)
@@ -145,7 +144,7 @@ Consistency == Cardinality(chosen) <= 1
 THEOREM Spec => []Consistency
 =============================================================================
 \* Modification History
-\* Last modified Mon Sep 09 15:59:38 CST 2019 by stary
+\* Last modified Mon Sep 09 16:00:55 CST 2019 by stary
 \* Last modified Sun Sep 01 12:54:07 CST 2019 by pure_
 \* Last modified Wed Jul 31 15:00:12 CST 2019 by hengxin
 \* Last modified Wed May 09 21:39:31 CST 2018 by dell
