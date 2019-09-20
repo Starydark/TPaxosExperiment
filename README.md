@@ -1,6 +1,6 @@
 ## Model Checking TPaxos with TLA+
 
-An experiment of model checking the consensus algorithm TPaxos in paper [PaxosStore@VLDB2017](http://www.vldb.org/pvldb/vol10/p1730-lin.pdf). We introduce a variant of TPaxos, TPaxosAP, and check the consistency of TPaxos and TPaxosAP. Meanwhile we build the refinement relation from TPaxos to Voting, TPaxos to EagerVoting(an algorithm equals to Voting) and check the correctness of the relation. The project includes three experiments:
+An experiment of model checking the consensus algorithm TPaxos in paper [PaxosStore@VLDB2017](http://www.vldb.org/pvldb/vol10/p1730-lin.pdf). We introduce a variant of TPaxos, TPaxosAP, and check the consistency of TPaxos and TPaxosAP. Meanwhile we build the refinement relation from TPaxos to Voting, from TPaxos to EagerVoting(an algorithm equals to Voting) and check the correctness of the relation. The project includes three experiments:
 
 - TPaxos and TPaxosAP satisfies Consistency.
 - TPaxos refines Voting, TPaxosAP refines EagerVoting.
@@ -22,9 +22,9 @@ An experiment of model checking the consensus algorithm TPaxos in paper [PaxosSt
 
 - Participant、Value: Symmetric Set
 - worker = 10
-- head > 40g
+- heap > 40g
 - profile: off
-- state constrain: exist model checking when get distinct states get to 100000000.
+- state constrain: exist model checking when distinct states get to 100000000.
 
 ### How to run
 
