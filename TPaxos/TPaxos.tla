@@ -32,6 +32,8 @@ ASSUME QuorumAssumption ==
 
 Ballot == Nat
 
+MaxBallot == Cardinality(Ballot) - 1
+
 PIndex == CHOOSE f \in [Participant -> 1 .. NP] : Injective(f)
 Bals(p) == {b \in Ballot : b % NP = PIndex[p] - 1} \* allocate ballots for each p \in Participant
 -----------------------------------------------------------------------------
@@ -143,6 +145,17 @@ chosen == UNION {ChosenP(p) : p \in Participant}
 Consistency == Cardinality(chosen) <= 1         
 
 THEOREM Spec => []Consistency
+---------------------------------------------------------------------------
+LConstrain == /\ \E p \in Participant:
+                /\ MaxBallot \in Bals(p)
+                /\ WF_vars(Prepare(p, MaxBallot))
+                /\ \A v \in Value: WF_vars(Accept(p, MaxBallot, v))
+                /\ \E Q \in Quorum:
+                    \A q \in Q: WF_vars(OnMessage(q))
+
+LSpec == Spec /\ LConstrain
+
+Liveness == <>(chosen # {})
 =============================================================================
 \* Modification History
 \* Last modified Mon Sep 09 15:59:38 CST 2019 by stary

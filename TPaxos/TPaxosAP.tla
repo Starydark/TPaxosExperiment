@@ -142,6 +142,17 @@ chosen == UNION {ChosenP(p) : p \in Participant}
 Consistency == Cardinality(chosen) <= 1         
 
 THEOREM Spec => []Consistency
+---------------------------------------------------------------------------
+LConstrain == /\ \E p \in Participant:
+                /\ MaxBallot \in Bals(p)
+                /\ WF_vars(Prepare(p, MaxBallot))
+                /\ \A v \in Value: WF_vars(Accept(p, MaxBallot, v))
+                /\ \E Q \in Quorum:
+                    \A q \in Q: WF_vars(OnMessage(q))
+
+LSpec == Spec /\ LConstrain
+
+Liveness == <>(chosen # {})
 =============================================================================
 \* Modification History
 \* Last modified Mon Sep 09 16:00:55 CST 2019 by stary
